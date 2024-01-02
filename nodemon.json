@@ -1,0 +1,4 @@
+{
+    "watch": ["src/**/*"],
+    "ext": "mjs,js,json"
+}

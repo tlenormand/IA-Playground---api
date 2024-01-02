@@ -1,0 +1,25 @@
+{
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "off",
+            4
+        ],
+        "no-mixed-spaces-and-tabs": "warn",
+        "no-unused-vars": "off",
+        "react/prop-types": ["warn", {"skipUndeclared": true}],
+        "quotes": [
+            "off",
+            "single"
+        ],
+        "semi": [
+            "off",
+            "always"
+        ]
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": false
+    }
+}

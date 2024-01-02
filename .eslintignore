@@ -1,0 +1,7 @@
+node_modules/*
+gulpfile.js
+nodemon.js
+package.json
+package-lock.json
+.babelrc.mjs
+.gitignore
