@@ -86,7 +86,7 @@ export default class LogsCRUD extends AbstractAPI {
 
             const stats = {
                 total: logs.length,
-                ExecutedTimeTotal: logs[logs.length - 1].executed_time_total,
+                ExecutedTimeTotal: this.getExecutedTimeTotal(logs),
                 chartRewardGame: this.generateChartRewardGame(logsRewardGame, params),
                 chartWidth: params.width || 800,
                 chartHeight: params.height || 400,
@@ -216,5 +216,38 @@ export default class LogsCRUD extends AbstractAPI {
             height: params.height || 400,
         });
         return canvas.renderToBufferSync(chartConfig);
+    }
+
+    getExecutedTimeTotal(logs) {
+        const executedTimeTotalPerInstance = this.getExecutedTimeTotalPerInstance(logs);
+
+        const executedTimeTotal = executedTimeTotalPerInstance.reduce((acc, item) => {
+            return acc + item.max_executed_time;
+        }, 0);
+
+        return executedTimeTotal;
+    }
+
+    getExecutedTimeTotalPerInstance(logs) {
+        const maxExecutedTimePerInstance = logs.reduce((acc, log) => {
+            const { docker_instance_id, executed_time_total } = log;
+
+            if (!acc[docker_instance_id]) { acc[docker_instance_id] = []; }
+
+            acc[docker_instance_id].push(executed_time_total);
+
+            return acc;
+        }, {});
+
+        const result = Object.keys(maxExecutedTimePerInstance).map((dockerInstanceId) => {
+            const maxExecutedTime = Math.max(...maxExecutedTimePerInstance[dockerInstanceId]);
+
+            return {
+                docker_instance_id: dockerInstanceId,
+                max_executed_time: maxExecutedTime,
+            };
+        });
+
+        return result;
     }
 }
