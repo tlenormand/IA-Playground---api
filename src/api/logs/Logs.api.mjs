@@ -83,10 +83,15 @@ export default class LogsCRUD extends AbstractAPI {
             if (!logs) return new Error(404_007);
 
             const logsRewardGame = this.getRewardGame(logs);
+            const doneLogs = this.getDoneLogs(logs);
 
             const stats = {
                 total: logs.length,
-                ExecutedTimeTotal: this.getExecutedTimeTotal(logs),
+                executedTimeTotal: this.getExecutedTimeTotal(logs),
+                totalGamePlayed: this.getTotalGamePlayed(doneLogs),
+                averageRewardByGame: this.getAverageRewardByGame(doneLogs),
+                averageExecutedTimeByGame: this.getAverageExecutedTimeByGame(doneLogs),
+                averageFrameByGame: this.getAverageFrameByGame(doneLogs),
                 chartRewardGame: this.generateChartRewardGame(logsRewardGame, params),
                 chartWidth: params.width || 800,
                 chartHeight: params.height || 400,
@@ -218,16 +223,6 @@ export default class LogsCRUD extends AbstractAPI {
         return canvas.renderToBufferSync(chartConfig);
     }
 
-    getExecutedTimeTotal(logs) {
-        const executedTimeTotalPerInstance = this.getExecutedTimeTotalPerInstance(logs);
-
-        const executedTimeTotal = executedTimeTotalPerInstance.reduce((acc, item) => {
-            return acc + item.max_executed_time;
-        }, 0);
-
-        return executedTimeTotal;
-    }
-
     getExecutedTimeTotalPerInstance(logs) {
         const maxExecutedTimePerInstance = logs.reduce((acc, log) => {
             const { docker_instance_id, executed_time_total } = log;
@@ -250,4 +245,11 @@ export default class LogsCRUD extends AbstractAPI {
 
         return result;
     }
+
+    getExecutedTimeTotal(logs) { return (this.getExecutedTimeTotalPerInstance(logs).reduce((acc, item) => acc + item.max_executed_time, 0)).toFixed(2); }
+    getDoneLogs(logs) { return logs.filter(log => log.done === true); }
+    getTotalGamePlayed(doneLogs) { return doneLogs.length; }
+    getAverageRewardByGame(doneLogs) { return (doneLogs.reduce((acc, item) => acc + item.reward_game, 0) / doneLogs.length).toFixed(2); }
+    getAverageExecutedTimeByGame(doneLogs) { return (doneLogs.reduce((acc, item) => acc + item.executed_time_game, 0) / doneLogs.length).toFixed(2); }
+    getAverageFrameByGame(doneLogs) { return (doneLogs.reduce((acc, item) => acc + item.frame_count_game, 0) / doneLogs.length).toFixed(0); }
 }
