@@ -1,58 +1,55 @@
-'use strict';
+import camelCaseToSnakeCase from '../utils/camelCaseToSnakeCase.mjs';
 
+
+/**
+ * Formats data for creating an Atari model post request.
+ *
+ * @param {object} data - The data object containing model configuration.
+ *
+ * @returns {object} The formatted data object with model name in snake_case.
+ */
 const formatAtariModelCreatePost = (data) => {
-    const user_id = data.modelConfig.userId;
-    const model_name = data.modelConfig.modelName;
-
-    // delete data.modelConfig.userId;
-    // delete data.modelConfig.modelName;
-
-    const layers = [];
-    for (const layer of data.modelLayers.layers) {
-        layers.push({
-            layer_position: layer.layerPosition,
-            input_shape: layer.inputShape,
-            type: layer.type,
-            filters: layer.filters,
-            strides: layer.strides,
-            activation: layer.activation,
-            units: layer.units,
-        });
-    }
-
-    return {
-        user_id: user_id,
-        model_name: model_name,
-        model_config: {
-            game: data.modelConfig.game,
-            is_new_model: data.modelConfig.isNewModel,
-            can_load_model: data.modelConfig.canLoadModel,
-            can_save_model: data.modelConfig.canSaveModel,
-            model_path: data.modelConfig.modelPath,
-            model_target_name: data.modelConfig.modelTargetName,
-            model_target_path: data.modelConfig.modelTargetPath,
-            parameters_optimizer_type: data.modelConfig.parametersOptimizerType,
-            parameters_optimizer_learningRate: data.modelConfig.parametersOptimizerLearningRate,
-            parameters_optimizer_clipnorm: data.modelConfig.parametersOptimizerClipnorm,
-            parameters_input_shape: data.modelConfig.parametersInputShape,
-            parameters_loss_function_type: data.modelConfig.parametersLossFunctionType,
-        },
-        model_layers: {
-            layers: layers
-        },
+    const newData = {
+        ...data,
+        modelName: data.modelConfig.modelName
     };
-}
 
-const formatAtariModelDeletePost = (data) => {
-    return {
-        user_id: data.userId,
-        model_name: data.modelName,
+    return camelCaseToSnakeCase(camelCaseToSnakeCase(newData));
+};
+
+/**
+ * Formats data for deleting an Atari model post request.
+ *
+ * @param {object} body - The body data of the request.
+ * @param {object} query - The query parameters of the request.
+ *
+ * @returns {object} The formatted data object with keys in snake_case.
+ */
+const formatAtariModelDeletePost = (body, query) => {
+    const data = {
+        ...body,
+        ...query,
     };
-}
 
-const formatModelDockerRunningPost = (data) => {
-    return { docker_instance_ids: data.dockerInstanceIds };
-}
+    return camelCaseToSnakeCase(data);
+};
+
+/**
+ * Formats data for a post request related to running a model in Docker.
+ *
+ * @param {object} body - The body data of the request.
+ * @param {object} query - The query parameters of the request.
+ *
+ * @returns {object} The formatted data object with keys in snake_case.
+ */
+const formatModelDockerRunningPost = (body, query) => {
+    const data = {
+        ...body,
+        ...query,
+    };
+
+    return camelCaseToSnakeCase(data);
+};
 
 
 export {

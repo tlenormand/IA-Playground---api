@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from "mongoose";
 
 
@@ -17,7 +15,4 @@ const modelsLayersSchema = new mongoose.Schema({
 const modelsModelLayer = mongoose.model('ModelsLayers', modelsLayersSchema, 'models.layers');
 
 
-export {
-    modelsLayersSchema,
-    modelsModelLayer
-};
+export default modelsModelLayer;

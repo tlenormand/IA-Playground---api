@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from "mongoose";
 import passportLocalMongoose from 'passport-local-mongoose';
 
@@ -13,12 +11,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         select: false
     },
-    // TOTO: Add updateList
-    // updateList: {
-    //     type: [Date],
-    //     default: [],
-    //     select: false
-    // },
     email: {
         type: String,
         required: [true, "Email is required"],
@@ -27,12 +19,16 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: [true, "Name is required"],
-        minLength: [1, "Name must be at least 1 characters long"]
+        required: [true, "Username is required"],
+        minLength: [1, "Username must be at least 1 characters long"]
+    },
+    language: {
+        type: String,
+        default: "en"
     },
     role: {
         type: String,
-        enum: ["admin", "user"],
+        enum: ["god", "super", "admin", "user"],
         default: "user"
     },
     // TODO: Handle active users
@@ -42,7 +38,7 @@ const userSchema = new mongoose.Schema({
     },
     hash: {
         type: String,
-        select: false
+        select: false,
     },
     salt: {
         type: String,
@@ -50,31 +46,27 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-userSchema.plugin(passportLocalMongoose, {
+const passportLocalMongooseOptions = {
     usernameField: 'email',
-    errorMessages: {
-        MissingPasswordError: 'No password was given',
-        AttemptTooSoonError: 'Account is currently locked. Try again later',
-        TooManyAttemptsError: 'Account locked due to too many failed login attempts',
-        NoSaltValueStoredError: 'Authentication not possible. No salt value stored',
-        IncorrectPasswordError: 'Password or email is incorrect',
-        IncorrectUsernameError: 'Password or email is incorrect',
-        MissingUsernameError: 'No email was given',
-    },
-    findByUsername: function(model, queryParameters) { // findByEmail
-        queryParameters.active = true; // Only find active users
+    lastLoginField: 'lastLogin',
+    attemptsField: 'attempts',
+    limitAttempts: true,
+    maxAttempts: 10,
+    interval: 100,
+    maxInterval: 1000 * 5,
+    unlockInterval: 1000 * 10,
+    findByUsername: function(model, queryParameters) {
+        queryParameters.active = true;
         return model.findOne(queryParameters);
     }
-    // TODO: Add limitAttempts
-    // limitAttempts: true,
-    // maxAttempts: 5,
-    // interval: 1000 * 60 * 60 * 24
-});
+};
+
+userSchema.plugin(passportLocalMongoose, passportLocalMongooseOptions);
 
 const userModel = mongoose.model('User', userSchema, 'users');
 
 
+export default userModel;
 export {
-    userSchema,
-    userModel
+    passportLocalMongooseOptions
 };

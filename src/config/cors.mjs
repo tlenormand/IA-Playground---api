@@ -1,6 +1,4 @@
-'use strict';
-
-import { config } from './config.mjs'
+import { config } from './config.mjs';
 
 
 const { security } = config;

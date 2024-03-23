@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from "mongoose";
 
 
@@ -22,7 +20,4 @@ const dockersSchema = new mongoose.Schema({
 const dockersModel = mongoose.model('Dockers', dockersSchema, 'dockers');
 
 
-export {
-    dockersSchema,
-    dockersModel
-};
+export default dockersModel;

@@ -1,9 +1,7 @@
-'use strict';
-
 import { ObjectId } from 'mongodb';
 
 import AbstractDB from '../../db/AbstractDB.mjs';
-import { modelsModel, aggregatedModel } from './Models.schema.mjs';
+import modelsModel, { aggregatedModel } from './Models.schema.mjs';
 
 
 export default class ModelsDB extends AbstractDB {
@@ -12,19 +10,13 @@ export default class ModelsDB extends AbstractDB {
         this.id = id;
     }
 
-// ********** GET **********
+// ********** CREATE **********
 
-    async findOne(query, projections = {}, options = {}) {
-        try {
-            return await super.findOne(modelsModel, query, projections, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
+// ********** READ ************
 
     async find(query, projections = {}, options = {}) {
         try {
-            const result = await super.aggregate(modelsModel, query, projections, options, [
+            const result = await super.aggregate(query, projections, options, [
                 { $match: query },
                 {
                     $lookup: {
@@ -58,45 +50,12 @@ export default class ModelsDB extends AbstractDB {
 
             return result;
         } catch (err) {
-            _log(err)
+            Global.log(err)
         }
     }
 
-// ********** POST **********
-
-    async createOne(data, options = {}) {
-        try {
-            return await super.createOne(modelsModel, data, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
-
-    // async createMany(data, options = {}) {
-    //     try {
-    //         return await super.createMany(modelsModel, data, options);
-    //     } catch (err) {
-    //         _log(err)
-    //     }
-    // }
-
-// ********** PUT **********
-
-    async updateOne(query, data, options = {}) {
-        try {
-            return await super.updateOne(modelsModel, query, data, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
+// ********** UPDATE **********
 
 // ********** DELETE **********
 
-    async deleteOne(query, options = {}) {
-        try {
-            return await super.deleteOne(modelsModel, query, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
 }

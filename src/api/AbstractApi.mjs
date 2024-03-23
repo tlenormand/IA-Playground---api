@@ -1,26 +1,25 @@
-'use strict';
-
-import { ObjectID } from 'mongodb';
-
-
+/**
+ * AbstractAPI class provides a basic structure for API controllers.
+ */
 class AbstractAPI {
-	constructor(user = {}) {
-		this.user = user;
-	}
+    #user = {};
 
-	_getUser() {
-		const { id, accountId } = this.user;
-		return { id: new ObjectID(id), accountId };
-	}
+    /**
+     * Constructor.
+     *
+     * @param {object} [user={}] - The user data.
+     */
+    constructor(user = {}) {
+        this.#user = user;
+    }
 
-	_getLanguage(language = 'session') {
-		if (language && this.user.language && language === 'session') return this.user.language;
-		return language;
-	}
-
-	_getDB() {
-		return this._getDBConnection();
-	}
+    /**
+     * Retrieves the user data stored in the instance.
+     *
+     * @returns {object} The user data.
+     */
+    _getUser() { return this.#user;	}
 }
+
 
 export default AbstractAPI;

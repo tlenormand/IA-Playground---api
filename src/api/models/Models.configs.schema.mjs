@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from "mongoose";
 
 
@@ -17,7 +15,4 @@ const modelsConfigsSchema = new mongoose.Schema({
 const modelsModelConfig = mongoose.model('ModelsConfigs', modelsConfigsSchema, 'models.configs');
 
 
-export {
-    modelsConfigsSchema,
-    modelsModelConfig
-};
+export default modelsModelConfig;

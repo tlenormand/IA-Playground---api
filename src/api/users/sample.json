@@ -1,64 +1,62 @@
 [
-  {
-    "name": "God",
-    "email": "god@test.test",
-    "password": "god1234",
-    "role": "god"
-  },
-  {
-    "name": "Admin",
-    "email": "admin@test.test",
-    "password": "admin1234",
-    "role": "admin"
-  },
-  {
-    "name": "John Doe",
-    "email": "john@test.test",
-    "password": "johnDOE1234"
-  },
-  {
-    "name": "Jane Doe",
-    "email": "jane@test.test",
-    "password": "janeDOE1234"
-  },
-  {
-    "name": "Bob Smith",
-    "email": "bob@test.test",
-    "password": "bobSMITH1234"
-  },
-  {
-    "name": "Alice Smith",
-    "email": "alice@test.test",
-    "password": "aliceSMITH1234"
-  },
-  {
-    "name": "David Lee",
-    "email": "david@test.test",
-    "password": "davidLEE1234"
-  },
-  {
-    "name": "Sarah Lee",
-    "email": "sarah@test.test",
-    "password": "sarahLEE1234"
-  },
-  {
-    "name": "Sam Brown",
-    "email": "sam@test.test",
-    "password": "samBROWN1234"
-  },
-  {
-    "name": "Emily Brown",
-    "email": "emily@test.test",
-    "password": "emilyBROWN1234"
-  },
-  {
-    "name": "Michael Chen",
-    "email": "michael@test.test",
-    "password": "michaelCHEN1234"
-  },
-  {
-    "name": "Tina Chen",
-    "email": "tina@test.test",
-    "password": "tinaCHEN1234"
-  }
+    {
+        "email": "king_arthur@gmail.com",
+        "username": "KingArthur",
+        "language": "en",
+        "password": "Excalibur123"
+    },
+    {
+        "email": "merlinwizard@yahoo.com",
+        "username": "MerlinWizard",
+        "language": "en",
+        "password": "MagicPower456"
+    },
+    {
+        "email": "lancelot@hotmail.com",
+        "username": "LancelotKnight",
+        "language": "en",
+        "password": "HolyGrail789"
+    },
+    {
+        "email": "guinevere@gmail.com",
+        "username": "GuinevereQueen",
+        "language": "en",
+        "password": "Camelot987"
+    },
+    {
+        "email": "gandalf@yahoo.com",
+        "username": "GandalfTheGrey",
+        "language": "en",
+        "password": "MiddleEarth123"
+    },
+    {
+        "email": "frodo@hotmail.com",
+        "username": "FrodoBaggins",
+        "language": "en",
+        "password": "RingBearer456"
+    },
+    {
+        "email": "aragorn@gmail.com",
+        "username": "AragornStrider",
+        "language": "en",
+        "password": "KingOfGondor789"
+    },
+    {
+        "email": "hermione@hotmail.com",
+        "username": "HermioneGranger",
+        "language": "en",
+        "password": "WingardiumLeviosa123"
+    },
+    {
+        "email": "ron@yahoo.com",
+        "username": "RonWeasley",
+        "language": "en",
+        "password": "Gryffindor456"
+    },
+    {
+        "email": "harry@gmail.com",
+        "username": "HarryPotter",
+        "language": "en",
+        "password": "TheChosenOne789"
+    }
 ]

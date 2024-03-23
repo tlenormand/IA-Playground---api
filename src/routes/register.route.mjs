@@ -1,43 +1,21 @@
-'use strict';
+/* global requestWrapper */
 
 import { Router } from 'express';
 
-import Ajv from '../utils/Ajv.mjs';
-import ErrorHandler from '../middlewares/errors/errorHandler.middleware.mjs';
-import SuccessHandler from '../middlewares/Success/SuccessHandler.middleware.mjs';
-import { userModel } from '../api/users/User.schema.mjs';
-import userSchema from './user.schema.mjs';
+import UserController from '../controller/User.controller.mjs';
 
 
 const router = new Router();
-const ajv = new Ajv(userSchema);
 
 
-router.post("/", async function (req, res) {
-    const error = ajv.validate(req.body);
-    if (error) { return res.status(422).json(ErrorHandler({ code: 422_001, error: error })); }
+router.post('/', requestWrapper(async function (req, res) {
+    const result = await new UserController(req.user).register(req, res);
 
-    try {
-        const user = await userModel.register(new userModel({ email: req.body.email, username: req.body.username }), req.body.password);
-        if (!user) { return res.status(500).json(ErrorHandler({ code: 500_001, error: error })); }
-
-        req.login(user, function (error) {
-            if (error) { return res.status(500).json(ErrorHandler({ code: 500_002, error: error })); }
-
-            // jwt.sign({ userId: user._id, email: user.email, username: user.username, role: user.role }, 'secret', { expiresIn: '6h' });
-            res.status(201).json(SuccessHandler({
-                code: 201_001,
-                data: {
-                    email: user.email,
-                    username: user.username,
-                    role: user.role
-                }
-            }));
-        });
-    } catch (error) {
-        return res.status(500).json(ErrorHandler({ code: 500_000, error: error }));
-    }
-});
+    return {
+        code: result.code,
+        data: result.data
+    };
+}));
 
 
 export default router;

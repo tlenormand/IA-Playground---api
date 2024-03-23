@@ -1,7 +1,5 @@
-'use strict';
-
 import AbstractDB from '../../db/AbstractDB.mjs';
-import { userModel } from './User.schema.mjs';
+import userModel from './User.schema.mjs';
 
 
 export default class UserDB extends AbstractDB {
@@ -10,59 +8,57 @@ export default class UserDB extends AbstractDB {
         this.id = id;
     }
 
-// ********** GET **********
-
-    async findOne(query, projections = {}, options = {}) {
-        try {
-            return await super.findOne(userModel, query, projections, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
-
-    async find(query, projections = {}, options = {}) {
-        try {
-            return await super.find(userModel, query, projections, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
-
-// ********** POST **********
+// ********** CREATE **********
 
     async createOne(data, options = {}) {
+        this.logResult(this.collectionName, 'createOne', data);
+
         try {
-            return await super.createOne(userModel, data, options);
-        } catch (err) {
-            _log(err)
+            return await userModel.register(new userModel(data), data.password);
+        } catch (error) {
+            Global.logError(error);
         }
     }
 
     async createMany(data, options = {}) {
+        this.logResult(this.collectionName, 'createMany', data);
+
+        let successCount = 0;
+        let failureCount = 0;
+        let createdItems = [];
+        let failedItems = [];
+
         try {
-            return await super.createMany(userModel, data, options);
-        } catch (err) {
-            _log(err)
+            const promises = data.map(async (item) => {
+                try {
+                    const dataCreated = await userModel.register(new userModel(item), item.password);
+                    successCount++;
+
+                    const userData = dataCreated.toObject();
+                    delete userData.password;
+                    delete userData.hash;
+                    delete userData.salt;
+
+                    createdItems.push(userData);
+                } catch (error) {
+                    failureCount++;
+                    failedItems.push({ item, error });
+                }
+            });
+
+            await Promise.all(promises);
+        } catch (error) {
+            Global.logError(error);
+        } finally {
+            Global.log({ successCount, failureCount });
+            return { successCount, failureCount, createdItems, failedItems };
         }
     }
 
-// ********** PUT **********
+// ********** READ ************
 
-    async updateOne(query, data, options = {}) {
-        try {
-            return await super.updateOne(userModel, query, data, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
+// ********** UPDATE **********
 
 // ********** DELETE **********
 
-    async deleteOne(query, options = {}) {
-        try {
-            return await super.deleteOne(userModel, query, options);
-        } catch (err) {
-            _log(err)
-        }
-    }
 }

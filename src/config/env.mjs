@@ -1,12 +1,10 @@
-'use strict'
-
 export const DEV  = 'development';
-export const TEST = 'test'; // unit tests
+export const TEST = 'test';
 
 let env = process.env.NODE_ENV;
 if ([TEST, DEV].indexOf(env) === -1) {
-	console.warn(`Invalid or missing environment variable NODE_ENV: expecting "${DEV}", "${TEST}". Falling back to "${DEV}".`);
-	env = DEV;
+    console.warn(`Invalid or missing environment variable NODE_ENV: expecting "${DEV}", "${TEST}". Falling back to "${DEV}".`);
+    env = DEV;
 }
 
 export const ENV = env;

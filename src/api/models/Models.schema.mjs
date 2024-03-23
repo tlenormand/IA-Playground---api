@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from "mongoose";
 
 
@@ -36,8 +34,7 @@ const aggregatedModel = modelsModel.aggregate([
 ]);
 
 
+export default modelsModel;
 export {
-    modelsSchema,
-    modelsModel,
     aggregatedModel
 };

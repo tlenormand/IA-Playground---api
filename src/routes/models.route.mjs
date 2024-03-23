@@ -1,77 +1,40 @@
-'use strict';
+/* global requestWrapper */
 
 import { Router } from 'express';
-import { ObjectId } from 'mongodb';
 
-import Ajv from '../utils/Ajv.mjs';
-import ErrorHandler from '../middlewares/errors/errorHandler.middleware.mjs';
-import SuccessHandler from '../middlewares/Success/SuccessHandler.middleware.mjs';
-import modelsSchema from './models.schema.mjs';
-import ModelsCRUD from '../api/models/Models.api.mjs';
-import DockersCRUD from '../api/dockers/Dockers.api.mjs';
+import ModelsController from '../controller/Models.controller.mjs';
 
 
 const router = new Router();
 
 
-router.post("/create/", async function (req, res) {
-    const ajv = new Ajv(modelsSchema);
-    const error = ajv.validate(req.body);
-    if (error) { return res.status(422).json(ErrorHandler({ code: 422_001, error: error })); }
+router.post('/', requestWrapper(async function (req) {
+    return {
+        code: 200_220,
+        data: await new ModelsController(req.user).createOne(req.body)
+    };
+}));
 
-	try {
-        const modelData = await new ModelsCRUD().createOne(req.body);
-        res.status(200).json(SuccessHandler({
-            code: 200_220,
-            data: modelData
-        }));
-	} catch (err) {
-        const errorCode = err.code || 500_000;
-        const status = (errorCode === 409_002) ? 409 : 500;
-        res.status(status).json(ErrorHandler({ code: errorCode, error: err.message }));
-	}
-});
+router.get('/', requestWrapper(async function (req) {
+    return {
+        code: 200_000,
+        data: await new ModelsController(req.user).get(req.query)
+    };
+}));
 
-router.post("/find/", async function (req, res) {
-    const ajv = new Ajv(modelsSchema);
-    const error = ajv.validate(req.body);
-    if (error) { return res.status(422).json(ErrorHandler({ code: 422_001, error: error })); }
+router.delete('/', requestWrapper(async function (req) {
+    return {
+        code: 200_222,
+        data: await new ModelsController(req.user).deleteOne(req.body, req.query)
+    };
+}));
 
-	try {
-        const data = await new ModelsCRUD().find(req.body);
-        res.status(200).json(SuccessHandler({
-            code: 200_223,
-            data: data,
-        }));
-	} catch (err) {
-		res.status(500).json(ErrorHandler({ code: 500_000, error: err }));
-	}
-});
-
-router.get("/get/", async function (req, res) {
-	try {
-        console.log(req.query);
-        const data = await new ModelsCRUD().get(req.query);
-        res.status(200).json(SuccessHandler({
-            code: 200_223,
-            data: data,
-        }));
-	} catch (err) {
-		res.status(500).json(ErrorHandler({ code: 500_000, error: err }));
-	}
-});
-
-router.get("/delete/", async function (req, res) {
-    try {
-        const data = await new ModelsCRUD().deleteOne(req.query);
-        res.status(200).json(SuccessHandler({
-            code: 200_222,
-            data: data,
-        }));
-    } catch (err) {
-        res.status(500).json(ErrorHandler({ code: 500_000, error: err }));
-    }
-});
+router.post('/find/', requestWrapper(async function (req) {
+    return {
+        code: 200_223,
+        data: await new ModelsController(req.user).find(req.body)
+    };
+}));
 
 
 export default router;

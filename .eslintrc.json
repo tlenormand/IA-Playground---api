@@ -1,25 +1,30 @@
 {
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "eslint-config-strict-mode"],
     "rules": {
-        "indent": [
-            "off",
-            4
-        ],
-        "no-mixed-spaces-and-tabs": "warn",
-        "no-unused-vars": "off",
-        "react/prop-types": ["warn", {"skipUndeclared": true}],
-        "quotes": [
-            "off",
-            "single"
-        ],
-        "semi": [
-            "off",
-            "always"
-        ]
+        "max-len": "off",
+        "no-trailing-spaces": "error",
+        "no-unused-vars": "warn",
+        "no-undef": "warn",
+        "require-jsdoc": ["warn", {
+            "require": {
+                "FunctionDeclaration": true,
+                "MethodDefinition": true,
+                "ClassDeclaration": true,
+                "ArrowFunctionExpression": true,
+                "FunctionExpression": true
+            }
+        }]
+    },
+    "globals": {
+        "Global": "readonly"
     },
     "parser": "@babel/eslint-parser",
     "parserOptions": {
+        "ecmaVersion": 2018,
         "sourceType": "module",
         "allowImportExportEverywhere": false
+    },
+    "env": {
+        "node": true
     }
 }
